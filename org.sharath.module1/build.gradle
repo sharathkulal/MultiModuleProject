@@ -1,0 +1,37 @@
+
+plugins {
+    id 'project-report'
+}
+//apply plugin: 'java'
+//apply plugin: 'eclipse'
+apply plugin: 'maven'
+
+//sourceCompatibility = 1.8
+version = '1.0'
+group = 'org.sharath.module1'
+
+/*sourceSets {
+    intTest {
+        compileClasspath += sourceSets.test.compileClasspath
+        runtimeClasspath += sourceSets.test.runtimeClasspath
+    
+        java {
+            srcDirs = [
+              'src/intTest/java'
+            ]
+        }
+    }
+}
+
+task blah() {
+    println 'projA Blah'
+}
+
+task intTest(type:Test){
+    println 'projA intTest'
+}*/
+
+dependencies {
+    //this will include all dependencies specified in root project ext.libs.test
+    testCompile libs.test
+}

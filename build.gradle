@@ -1,0 +1,84 @@
+
+plugins {
+    id 'project-report'
+}
+apply plugin: 'java'
+
+apply from: "dependencies.gradle"
+
+//sourceCompatibility = 1.8
+//version = '1.0'
+//group = 'rootproj'
+
+subprojects {
+    apply plugin: 'java'
+    apply plugin: "jacoco"
+    buildDir = "${projectDir}/build-gradle"
+    sourceCompatibility = 1.8
+    
+    repositories {
+        mavenCentral()
+    }
+    
+    //All Subprojects will have this dependency
+    dependencies {
+        compile group: 'org.apache.logging.log4j', name: 'log4j-api', version:ver.log4j
+    }
+    
+    jacocoTestReport {
+        reports {
+            xml.enabled false
+            csv.enabled false
+            html.destination "${buildDir}/jacocoHtml"
+        }
+        executionData = fileTree("${buildDir}/jacoco").include('**/*.exec')
+    }
+    
+    sourceSets {
+    intTest {
+        compileClasspath += sourceSets.test.compileClasspath
+        runtimeClasspath += sourceSets.test.runtimeClasspath
+    
+        java {
+            srcDirs = [
+              'src/intTest/java'
+                ]
+            }
+        }
+    }
+    
+    task intTest(type:Test){
+        println "proj intTest $project.name"
+    }
+    
+    //these libraries can be imported in submodules
+    ext.libs = [
+        test:[
+            [group: 'junit', name: 'junit', version: ver.junit],
+            [group: 'org.hamcrest', name: 'hamcrest-library', version: ver.hamcrest],
+            [group: 'org.mockito', name: 'mockito-core', version: ver.mockito]
+        ]
+    ]
+    
+}
+
+
+task blah() {
+    println 'root Blah'
+}
+
+task intTest(type:Test){
+    println 'root intTest'
+}
+
+task unitTestReport(type: TestReport) {
+    destinationDir = file("$buildDir/reports/allUnitTests")
+    // Include the results from the `test` task in all subprojects
+    reportOn subprojects*.test
+}
+
+task intTestReport(type: TestReport) {
+    destinationDir = file("$buildDir/reports/allIntTests")
+    // Include the results from the `test` task in all subprojects
+    reportOn subprojects*.intTest
+}

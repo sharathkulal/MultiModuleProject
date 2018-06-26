@@ -1,0 +1,41 @@
+
+plugins {
+    id 'project-report'
+}
+//apply plugin: 'java'
+//apply plugin: 'eclipse'
+apply plugin: 'maven'
+
+//sourceCompatibility = 1.8
+version = '1.0'
+group = 'org.sharath.module2'
+
+/*sourceSets {
+    intTest {
+        compileClasspath += sourceSets.test.compileClasspath
+        runtimeClasspath += sourceSets.test.runtimeClasspath
+    
+        java {
+            srcDirs = [
+              'src/intTest/java'
+            ]
+        }
+    }
+}
+
+task blah() {
+    println 'projB Blah'
+}
+
+task intTest(type:Test){
+    println 'projB intTest'
+}*/
+
+dependencies {
+    compile (project(':org.sharath.module1')) {
+        transitive = true //include all dependencies from module1
+    }
+    
+    //this will include all dependencies specified in root project ext.libs.test
+    testCompile libs.test
+}
